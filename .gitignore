@@ -1,0 +1,7 @@
+*.bat
+*__pycache__
+*.idea
+venv
+Jenkinsfile
+*.env
+
