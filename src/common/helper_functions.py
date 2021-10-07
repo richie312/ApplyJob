@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Feb 12 12:18:21 2020
 
-@author: Richie
-"""
 
 import requests
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
+#ToDO Define the sql query genrator class.
 
 def collect_location_wise_count(url,days = 300):
     """collect_location_wise_count() function takes two arguments;
