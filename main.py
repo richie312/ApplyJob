@@ -30,10 +30,11 @@ def addDetails(payload):
 @api.route('/get_data/', methods=["GET"])
 @api.doc(params={'TableName': 'mission_half_marathon'})
 class MyResource(Resource):
-    def get_data(self):
+    def get(self):
         t = request.args
         data = Application(t).get_data()
         return jsonify(str(data))
+
 
 @app.route('/delete', methods=['POST'])
 @api.doc(params={'TableName': "Target Table name",
