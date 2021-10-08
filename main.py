@@ -9,8 +9,8 @@ from src.objects.Application import Application
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-# api = Api(app, version='1.0', title='Common Database API',
-#                 description='Common Database for all my application.')
+api = Api(app, version='1.0', title='Common Database API',
+                description='Common Database for all my application.')
 
 # load the environment variables
 load_dotenv('.env')
@@ -20,7 +20,6 @@ def homepage():
     return render_template("user_form.html")
 
 @app.route('/addDetails', methods=['POST'])
-#@api.doc(params={'columns': []})
 def addDetails(payload):
     # Instantiate the Application object and execute required method.
     obj = Application(payload["TableName"],payload)
@@ -29,15 +28,22 @@ def addDetails(payload):
     return render_template('user_form_response.html')
 
 @app.route('/get_data', methods=['GET'])
-def data(payload):
-    data = Application(payload["TableName"]).get_data()
+def data():
+    payload = request.args
+    print(payload)
+    data = Application(payload).get_data()
     return jsonify(data)
 
 @app.route('/delete', methods=['POST'])
-def delete(payload):
+@api.doc(params={'TableName': "Target Table name",
+                 "Column":"ColumnName",
+                 "Value": "value to be deleted from the column."})
+def delete():
+    payload = request.get_json()
     Application(payload["TableName"]).delete(payload)
+    return {"Operation": "Successful"}
 
 
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0',debug=True,port=5001)
+    app.run(host = '127.0.0.1',debug=True,port=5001)
