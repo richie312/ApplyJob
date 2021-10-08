@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-import flask
-from flask import Flask, request, json,render_template,redirect,url_for,jsonify,json
+import flask, json
+from flask import Flask, request, json,render_template,redirect,url_for,jsonify
 from dotenv import load_dotenv
-from flask_restx import Api
+from flask_restx import Api, Resource, fields
 from src.objects.Application import Application
 
 
@@ -27,12 +27,13 @@ def addDetails(payload):
     obj.add_details()
     return render_template('user_form_response.html')
 
-@app.route('/get_data', methods=['GET'])
-def data():
-    payload = request.args
-    print(payload)
-    data = Application(payload).get_data()
-    return jsonify(data)
+@api.route('/get_data/', methods=["GET"])
+@api.doc(params={'TableName': 'mission_half_marathon'})
+class MyResource(Resource):
+    def get_data(self):
+        t = request.args
+        data = Application(t).get_data()
+        return jsonify(str(data))
 
 @app.route('/delete', methods=['POST'])
 @api.doc(params={'TableName': "Target Table name",

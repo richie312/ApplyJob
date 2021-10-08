@@ -9,7 +9,7 @@ class TestApplication(unittest.TestCase):
     def setUp(self):
         self.env = "local"
         self.url = "http://127.0.0.1:5001"
-        self.payload = {"TableName": "company_email1","Column": "Company","Value": "Test"}
+        self.payload = {"TableName": "mission_half_marathon","Column": "Company","Value": "Test"}
         self.schema_file = os.path.join(data_dir, "schema.json")
         self.schema_data = json.load(open(self.schema_file))
         self.table_list = list(self.schema_data.keys())
@@ -25,10 +25,9 @@ class TestApplication(unittest.TestCase):
 
     # REST API TestCases
     def test_get_data_api(self):
-        get_data_url = self.url + r'/get_data'
+        get_data_url = self.url + r'/get_data/'
         web_data = requests.get(get_data_url, params=self.payload)
-        print("Ignoring the testcase as the server is not reachable.")
-        self.assertEqual(200, web_data.status_code, "TestCase for web data api passed.")
+        self.assertEqual(200, web_data.status_code, "TestCase for web data api failed.")
         print("Test Case for Rest API functionality of {get_data_url} passed.".format(
             get_data_url = get_data_url
         ))
