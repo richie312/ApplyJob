@@ -40,7 +40,7 @@ class MyResource(Resource):
                  "Value": "value to be deleted from the column."})
 def delete():
     payload = request.get_json()
-    Application(payload["TableName"]).delete(payload)
+    Application(payload).delete()
     return {"Operation": "Successful"}
 
 

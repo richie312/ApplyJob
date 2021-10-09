@@ -9,11 +9,12 @@ class Application(object):
         """
         It instantiate the class with payload.
         """
+        self.payload = payload
         self.table_name = payload["TableName"]
         self.application_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.connection = db_connection()
         self.cursor = self.connection.cursor()
-        self.generator = Generator(payload)
+        self.generator = Generator(self.payload)
 
     # def add_details(self):
     #     self.function = "add details"
@@ -31,12 +32,13 @@ class Application(object):
     #     # pass sql to update table
     #     pass
 
-    # def delete(self):
-    #     delete_query = self.generator.delete_query(self.initializer)
-    #     self.cursor(delete_query,(self.initializer["Value"],))
-    #     self.connection.commit()
-    #     self.cursor.close()
-    #     self.connection.close()
+    def delete(self):
+        delete_query = self.generator.delete_query()
+        self.cursor.execute("SET SQL_SAFE_UPDATES = 0;")
+        self.cursor.execute(delete_query,(self.payload["Value"],))
+        self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
 
 
     def get_data(self):

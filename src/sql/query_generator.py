@@ -15,8 +15,8 @@ class Generator(object):
 
     def delete_query(self):
         query = """delete from {table_name} where {target_column}=%s;""".format(
-            table_name=self.table_name,target_column = self.payload["target_column"])
-
+            table_name=self.payload["TableName"],target_column = self.payload["TargetColumn"])
+        print(query)
     def select_query(self):
         query = "select * from {table_name}".format(table_name = self.payload["TableName"])
         return query
