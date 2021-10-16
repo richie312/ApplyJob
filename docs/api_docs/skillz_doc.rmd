@@ -1,0 +1,1138 @@
+---
+output: html_document
+---
+
+
+# <span style="color:#586E82;font:Bembo"> Skillz API Documentation for Online Compiler </span>
+
+### <span style="color:#1B252E;font:Bembo"> List of API</span> {.tabset.tabset-fade #Go-Back}
+
+Click on any of the below link to directly go to the documentation of the api.
+
+* [Create Problem](#Create-Problem)
+* [Update Problem](#Update-Problem)
+* [Get Problem](#Get-Problem)
+* [create TestCase](#create-TestCase)
+* [Update TestCase](#update-TestCase)
+* [create SubmissionID](#create-submissionID)
+* [Get Result](#Get-Result)
+* [Get Compiler Output](#Get-Compiler-Output)
+* [Get Rankings](#Get-Rankings)
+* [Get Testcases](#Get-Testcases)
+* [Get Checkfile Requirement](#Get-Checkfile-Requirements)
+* [Update Checkfile Requirement](#Update-Checkfile-Requirements)
+* [Delete Checkfile Requirement](#Delete-Checkfile-Requirements)
+* [Get Languages](#Get-Languages)
+
+
+### <span style="color:#1B252E;font:Bembo">Create Problem</span> {.tabset.tabset-fade #Create-Problem}
+* [Back To Top](#Go-Back)
+
+In order to create the problem with sphere engine following parameters are required.
+This is post method and thus required data in json format in key:value format. Please click on the data button to see the accepted format.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+create_prob_df = read.csv('create_prob.csv',stringsAsFactors = FALSE)
+colnames(create_prob_df) = c("ParameterName","Type",    
+"Description", "Mandatory Parameter")   
+datatable(create_prob_df)%>%formatStyle(
+  'Mandatory Parameter', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+
+```
+
+#### POST {.tabset .tabset-fade}
+Following are the methods to call the api using curl and Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+##### cURL
+```{r,eval = FALSE}
+$ cat request.json
+{
+    "name": "Example problem",
+    "masterjudgeId": 1001
+}
+
+$ curl -X POST -H 'Content-Type: application/json' -d "`cat request.json`" 'https://base_url/create_problem_id'
+```
+
+##### Python
+```{r,eval = FALSE}
+data = {
+        "name": "problem name",
+        "body": "problem_statement",
+        "typeId": 0, #optional
+        "interactive": False, #optional
+        "masterjudgeId": 1001,
+        "level":"Easy"
+        }
+
+
+url = 'https://<base_url>/create_problem_id'
+
+response = requests.post(url,json = data)
+
+response.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{
+    "id": 27874,
+    "code": "UD6LAQXB82"
+}
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+data = {
+        "name": "problem name",
+        "body": "problem_statement",
+        "typeId": 0, #optional
+        "interactive": False, #optional
+        "masterjudgeId": 1001,
+        "level":"Easy"
+        }
+
+
+```
+
+#### Url
+```{r,eval = FALSE}
+http://127.0.0.1:5000/create_problem_id
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Update Problem</span> {.tabset .tabset-fade #Update-Problem}
+* [Back To Top](#Go-Back)
+
+A problem can be updated with its primary ID and name with the following parameters.
+
+```{r,eval = TRUE,echo=FALSE,warning = FALSE}
+library(DT)
+library(kableExtra)
+
+update_prob_df = read.csv('update_prob.csv',stringsAsFactors = FALSE)
+colnames(update_prob_df) = c("Parameter Name","Type","Description","Mandatory Parameter")
+datatable(update_prob_df)%>%formatStyle(
+  'Mandatory Parameter', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+```
+
+#### PUT {.tabset .tabset-fade}
+Following are the methods to call the api using curl and Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+##### cURL
+```{r,eval = FALSE}
+$ cat request.json
+{
+    "id": 27874,
+    "name": "newProblemName"
+}
+
+$ curl -X POST -H 'Content-Type: application/json' -d "`cat request.json`" 'https://base_url/update_problem'
+```
+
+##### Python
+```{r,eval = FALSE}
+
+data = {
+        "id": 27874,
+        "name": "Frog jump",
+        "masterjudgeId": 1001,
+        "body": body, #optional
+        "interactive": False
+        }
+url = 'https://<base_url>/update_problem'
+
+response = requests.post(url,json = data)
+
+response.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{ 'Updated'}
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+data = {
+        'name': 'New Problem Name',
+        'body': 'Modified Problem Statment',
+        'typeId': 0, #optional
+        'interactive': FALSE, #optional
+        'masterjudgeId': 1001 #optional 
+        }
+```
+
+#### Url
+```{r,eval = FALSE}
+http://127.0.0.1:5000/update_problem
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Get Problem</span> {.tabset .tabset-fade #Get-Problem}
+
+* [Back To Top](#Go-Back)
+
+This api has the provision to get all the problems category wise. There are three categories **Easy**, **Medium**, **Hard**.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+get_prob_df = read.csv('get_problems.csv',stringsAsFactors = FALSE)
+colnames(get_prob_df) = c("ParameterName","Type",    
+"Description", "Mandatory Parameters")    
+datatable(get_prob_df)%>%formatStyle(
+  'Mandatory Parameters', target = 'row',
+  backgroundColor = styleEqual(c("true", "Optional"), c('#5BE15B', ''))
+)
+
+```
+
+#### GET {.tabset .tabset-fade}
+Following are the methods to call the api using curl and Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+##### cURL
+```{r,eval = FALSE}
+$ cat request.json
+{
+    "level": "Easy"
+}
+
+$ curl -X GET -H 'Content-Type: application/json' -d "`cat request.json`" 'https://base_url/get_problems'
+```
+
+##### Python
+```{r,eval = FALSE}
+data = {
+        "level":"Easy"
+        }
+
+url = 'https://<base_url>/get_problems'
+
+response = requests.get(url,json = data)
+response.json()
+
+### or
+
+url = 'https://<base_url>/get_problems?level=Easy'
+response = requests.get(url,json = data)
+response.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+
+{'problem_id': [27750, 27874, 28536, 28618],
+ 'problem_code': ['V60G3XJSFE', 'UD6LAQXB82', 'COVWV4ZACO', 'TN0TQIA1OD'],
+ 'problem_name': ['Indices', 'Frog jump', 'problem name', 'problem name'],
+ 'problem_description': ['<h3>Indices</h3><p>\n        Define a function which takes any two random number a and b as an argument and returns\n        a^b. for instance a =3, b= 7, Thus output is 3^7.\n        </p>\n        ',
+  'A small frog wants to get to the other side of the road. The frog is currently located at position X and wants to get to a position greater than or equal to Y. The small frog always jumps a fixed distance, D.\n\nCount the minimal number of jumps that the small frog must perform to reach its target.\n\nWrite a function:\n\ndef solution(X, Y, D)\n\nthat, given three integers X, Y and D, returns the minimal number of jumps from position X to a position equal to or greater than Y.\n\nFor example, given:\n\n  X = 10\n  Y = 85\n  D = 30\nthe function should return 3, because the frog will be positioned as follows:\n\nafter the first jump, at position 10 + 30 = 40\nafter the second jump, at position 10 + 30 + 30 = 70\nafter the third jump, at position 10 + 30 + 30 + 30 = 100\nWrite an efficient algorithm for the following assumptions:\n\nX, Y and D are integers within the range [1..1,000,000,000];\nX â‰¤ Y.Make a function frog_jump which takes three argument X, Y and Z and returns\nthe minimum number of steps.',
+  'problem_statement',
+  'problem_statement']}
+
+
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+data = {
+        "level":"Easy"
+        }
+
+
+```
+
+#### Url
+```{r,eval = FALSE}
+http://<base_url>/get_problems
+
+```
+
+
+
+
+### <span style="color:#1B252E;font:Bembo">create TestCase</span> {.tabset .tabset-fade #create-TestCase}
+
+* [Back To Top](#Go-Back)
+
+A testcase associated with a problem can be updated with its primary number and problemId with the following parameters.
+
+```{r,eval = TRUE,echo=FALSE,warning = FALSE}
+library(DT)
+library(kableExtra)
+create_testcase_df = read.csv('create_testcase.csv',stringsAsFactors = FALSE)
+colnames(create_testcase_df) = c("Parameter Name","Type","Description","Mandatory Parameter")
+datatable(create_testcase_df)%>%formatStyle(
+  'Mandatory Parameter', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+```
+
+#### POST {.tabset .tabset-fade}
+Following are the methods to call the api using curl and Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+##### cURL
+```{r,eval = FALSE}
+{
+    "input": "input content", 
+    "timeLimit": 10, 
+    "output": "output content",
+    "judgeId": 1
+}
+        
+        
+$ curl -X POST -H 'Content-Type: application/json' -d "`cat request.json`" 'http://<base url>/create_testcases'
+
+```
+
+##### Python
+```{r,eval = FALSE}
+
+data = {
+        'id': 27874,
+        'number': 2,
+        'input_file': input,# optional; string
+        'output_file': output, #optional; string
+        'timelimit': 5, 
+        'judgeId': 1, 
+        'active': True,
+        'check_file': {'Python 3.x':check_file} # accepts dictionary                              lang:source for check_file; check_file is string.
+        }
+url = "http://<base_url>/create_testcases"
+
+a = requests.post(url,json = data)
+a.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{
+    "number": 3
+}
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+
+data = {
+        'id': 27874,
+        'number': 2,
+        'input_file': input,# optional; string
+        'output_file': output, #optional; string
+        'timelimit': 5, 
+        'judgeId': 1, 
+        'active': True,
+        'check_file': {'Python 3.x':check_file} # accepts dictionary                              lang:source for check_file; check_file is string.
+        }
+```
+
+#### Url
+```{r,eval = FALSE}
+http://<base url>/create_testcases
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Update TestCase</span> {.tabset .tabset-fade #update-TestCase}
+
+* [Back To Top](#Go-Back)
+
+A testcase associated with a problem can be updated with its primary number and problemId with the following parameters.
+
+```{r,eval = TRUE,echo=FALSE,warning = FALSE}
+library(DT)
+library(kableExtra)
+update_testcase_df = read.csv('update_testcase.csv',stringsAsFactors = FALSE)
+colnames(update_testcase_df) = c("Parameter Name","Type","Description","Mandatory Parameter")
+datatable(update_testcase_df)%>%formatStyle(
+  'Mandatory Parameter', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+```
+
+#### PUT {.tabset .tabset-fade}
+Following are the methods to call the api using curl and Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+##### cURL
+```{r,eval = FALSE}
+$ cat request.json
+{
+    "input": "updated content", 
+    "timeLimit": 9, 
+    "output": "updated content"
+}
+        
+$ curl -X PUT -H 'Content-Type: application/json' -d "`cat request.json`" 'http://<baser_url>/update_testcase'
+
+```
+
+##### Python
+```{r,eval = FALSE}
+
+data = {
+        "id": 27874,
+        "number": 1,
+        #"input_file": input,# optional
+        #"output_file": output, #optional
+        "timelimit": 5,
+        "judgeId": 1, 
+        "active": True,
+       # "check_file": {"Python 3.x":check_file} # accepts dictionary lang:source for check_file
+        }
+
+url = "http://<base_url>/update_testcase"
+
+a = requests.put(url,json = data)
+a.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{
+    "Updated": TRUE
+}
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+
+data = {
+        "id": 27874,
+        "number": 1,
+        #"input_file": input,# optional
+        #"output_file": output, #optional
+        "timelimit": 5,
+        "judgeId": 1, 
+        "active": True,
+       # "check_file": {"Python 3.x":check_file} # accepts dictionary lang:source for check_file
+        }
+
+```
+
+#### Url
+```{r,eval = FALSE}
+http://<base url>/update_testcase
+
+```
+
+
+
+### <span style="color:#1B252E;font:Bembo">Create SubmissionID</span> {.tabset .tabset-fade #create-submissionID}
+
+* [Back To Top](#Go-Back)
+
+SubmissionID is created for each submission by the user who is taking the test. This submissionid is generated against a problemid and compilerID.
+
+```{r,eval = TRUE,echo=FALSE,warning = FALSE}
+library(DT)
+library(kableExtra)
+get_submissionID_df = read.csv('get_submissionID.csv',stringsAsFactors = FALSE)
+colnames(get_submissionID_df) = c("Parameter Name","Type","Description","Mandatory Parameter")
+datatable(get_submissionID_df)%>%formatStyle(
+  'Mandatory Parameter', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+```
+
+#### POST {.tabset .tabset-fade}
+Following are the methods to call the api using curl and Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+##### cURL
+```{r,eval = FALSE}
+$ cat request.json
+{
+    "problemId": 42, 
+    "compilerId": 1, 
+    "source": "<source code>"
+}
+
+$ curl -X POST -H 'Content-Type: application/json' -d "`cat request.json`" 'http://<base_url>/get_submissionId'
+
+```
+
+##### Python
+```{r,eval = FALSE}
+
+submission_data = {
+        "source": SourceFile,
+        "language": "Python 3.x",
+        "problem_name": "Frog jump",
+        "candidate_name": "Mainak"
+        }
+url = "http://<base_url>/get_submissionId"
+
+a = requests.post(url,json = data)
+a.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{
+    "id": 42
+}
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+submission_data = {
+        "source": SourceFile,
+        "language": "Python 3.x",
+        "problem_name": "Frog jump",
+        "candidate_name": "Mainak"
+        }
+
+```
+
+#### Url
+```{r,eval = FALSE}
+http://<base_url>/get_submissionId
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Get Result</span> {.tabset .tabset-fade #Get-Result}
+* [Back To Top](#Go-Back)
+
+Get result api uses the get method to fetch the result of a submissionId against the testcases of a specific problem.
+
+```{r,eval = TRUE,echo=FALSE,warning = FALSE}
+library(DT)
+library(kableExtra)
+get_result_df = read.csv('get_result.csv',stringsAsFactors = FALSE)
+colnames(get_result_df) = c("Parameter Name","Type","Description","Mandatory Parameter")
+datatable(get_result_df)%>%formatStyle(
+  'Mandatory Parameter', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+```
+
+#### GET {.tabset .tabset-fade}
+Following are the methods to call the api using curl and Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+##### cURL
+```{r,eval = FALSE}
+curl -X GET -H 'Content-Type: application/json' 'http://base_url/get_result>'
+
+
+```
+
+##### Python
+```{r,eval = FALSE}
+
+data = {'userName': 'Aritra',
+        'problemName': 'Frog Jump'
+        }
+url = "http://<base_url>/get_result?userName={}&problemName={}".format(data['userName'],data['problemName'])
+
+a = requests.get(url,json = data)
+a.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{
+    "id": 42,
+    "executing": false,
+    "date": "2017-02-24 10:02:26 +00:00",
+    "compiler": {
+        "id": 1,
+        "name": "C++",
+        "version": {
+            "id": 1,
+            "name": "gcc 6.3"
+        }
+    },
+    "problem": {
+        "id": 142,
+        "code": "EXPRBL",
+        "name": "Example Problem",
+        "uri": "https://<customerId>.problems.sphere-engine.com/api/v4/problems/142?access_token=<access_token>"
+    },
+    "result": {
+        "status": {
+            "code": 15,
+            "name": "accepted"
+        },
+        "score": 100,
+        "time": 1.24,
+        "memory": 2048,
+        "signal": 0,
+        "signal_desc": "",
+        "streams": {
+            "source": {
+                "size": 189,
+                "uri": "https://<customerId>.problems.sphere-engine.com/api/v4/submissions/42/source-42?access_token=<access_token>"
+            },
+            "output": {
+                "size": 11,
+                "uri": "https://<customerId>.problems.sphere-engine.com/api/v4/submissions/42/stdout-42?access_token=<access_token>"
+            },
+            "error": null,
+            "cmpinfo": null,
+            "debug": {
+                "size": 96,
+                "uri": "https://<customerId>.problems.sphere-engine.com/api/v4/submissions/42/stdout-42?access_token=<access_token>"
+            }
+        },
+        "testcases": [
+            {
+                "number": 0,
+                "status": {
+                    "code": 15,
+                    "name": "accepted"
+                },
+                "score": 100,
+                "memory": 2048,
+                "time": 1.24,
+                "signal": 0,
+                "signal_desc": ""
+            }
+        ]
+    }
+}
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+data = {'userName': 'Aritra',
+        'problemName': 'Frog Jump'
+        }
+
+```
+
+#### Url
+```{r,eval = FALSE}
+http://<base_url>/get_result?userName=Aritra&problemName=Frog Jump
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Get Compiler Output</span> {.tabset .tabset-fade #Get-Compiler-Output}
+* [Back To Top](#Go-Back)
+
+This api has the provision to get the compiler output each submission.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+compiler_output_df =read.csv('get_compiler_output.csv',stringsAsFactors = FALSE)
+colnames(compiler_output_df) = c("ParameterName","Type",    
+"Description", "Mandatory Parameters")    
+datatable(compiler_output_df)%>%formatStyle(
+  'Mandatory Parameters', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+
+```
+
+#### GET {.tabset .tabset-fade}
+Following is the methods to call the api using Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+
+##### Python
+```{r,eval = FALSE}
+with open("source.py","r") as readfile:
+    source = readfile.read()
+
+data = {
+        "source": source,
+        "language" : "Python 3.x", # python language
+        "input" : 10
+        }
+
+url = "http://<base-url>/get_compiler_result"
+import requests
+result = requests.get(url)
+result.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+output
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+data = {
+        "source": source,
+        "language" : "Python 3.x", # python language
+        "input" : 10
+        }
+
+```
+
+#### Url
+```{r,eval = FALSE}
+http://<base_url>/get_compiler_result"
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Get Rankings</span> {.tabset .tabset-fade #Get-Rankings}
+* [Back To Top](#Go-Back)
+This api has the provision to get the ranks of each submission. Ranks can be fetched individually or all together.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+get_rank_df = read.csv('get_rank.csv',stringsAsFactors = FALSE)
+colnames(get_rank_df) = c("ParameterName","Type","Default Value",    
+"Description", "Mandatory Parameters")    
+datatable(get_rank_df)%>%formatStyle(
+  'Mandatory Parameters', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', 'yellow'))
+)
+
+```
+
+#### GET {.tabset .tabset-fade}
+Following is the methods to call the api using Python. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+
+##### Python
+```{r,eval = FALSE}
+data = {"candidateName": "Mainak"}
+url = "http://127.0.0.1:5000/get_ranking?candidateName={}".format(data['candidateName'])
+import requests
+result = requests.get(url,json = data)
+result.json()
+
+""" OR """
+
+url = "http://127.0.0.1:5000/get_ranking"
+import requests
+result = requests.get(url)
+result.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+
+Individual Rank
+
+{'Rank': [[['1']]], 'name': 'Mainak'}
+
+All together
+
+{'Candidate Name': ['Mainak',
+  'Aritra',
+  'Ashutosh',
+  'Ankita',
+  'Ankita',
+  'Ankita',
+  'Ankita',
+  'Test1'],
+ 'Rank': ['1',
+  '2',
+  '3',
+  '4',
+  '5',
+  'Not Applicable due to wrong answer',
+  'Not Applicable due to wrong answer',
+  'Not Applicable due to wrong answer'],
+ 'SubmissionId': ['4490375',
+  '4490374',
+  '4490376',
+  '4490377',
+  '4490377',
+  '4490378',
+  '4490378',
+  '4490379']}
+
+
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+data = {"candidateName": "Mainak"}
+
+```
+
+#### Url
+```{r,eval = FALSE}
+https://<base_url>/get_ranking?candidateName=Mainak
+
+https://<base_url>/get_ranking
+
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Get Testcases</span> {.tabset .tabset-fade #Get-Testcases}
+* [Back To Top](#Go-Back)
+
+This api has the provision to get the checkfile for each language for specific problem along with the testcase details.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+get_testcase_df = read.csv('testcase.csv',stringsAsFactors = FALSE)
+colnames(get_testcase_df) = c("ParameterName","Type","Description", "Mandatory Parameters")    
+datatable(get_testcase_df)%>%formatStyle(
+  'Mandatory Parameters', target = 'row',
+  backgroundColor = styleEqual(c("true", "Optional"), c('#5BE15B', 'yellow'))
+)
+```
+
+#### GET {.tabset .tabset-fade}
+Following is the method with Python to call the api. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+
+##### Python
+```{r,eval = FALSE}
+data = {"problemId": 28971,
+        "language": "Python 3.x"}
+
+import requests
+url = "http://127.0.0.1:5000/get_testcases?problemId={}&language={}".format(data['problemId'],data['language'])
+
+""" OR """
+
+response = requests.get('http://127.0.0.1:5000/get_testcases?problemId=28971&language=Python 3.x')
+response.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{'check_file': '\nimport sys\n\nfor line in sys.stdin:\n    arr = eval(line)\n    print(bubbleSort(arr))',
+ 'testcases': '{"active": [true], "number": [0], "judge_id": [{"id": 1, "uri": "https://b47c8916.problems.sphere-engine.com/api/v4/judges/1?access_token=4c1e602f25ea827d81f3f84dbdbd9527", "name": "Ignores extra whitespaces"}]}'}
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+data = {"problemId": 28971,
+        "language": "Python 3.x"}
+
+```
+
+#### Url
+```{r,eval = FALSE}
+https://<base_url>/get_testcases?problemId=28971&language=Java
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Get CheckFile Requirements</span> {.tabset .tabset-fade #Get-Checkfile-Requirements}
+* [Back To Top](#Go-Back)
+
+This api has the provision to get the checkfile for each language for specific problem along with the testcase details.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+get_cfrequirement_df = read.csv('checkfile_requirement.csv',stringsAsFactors = FALSE)
+colnames(get_cfrequirement_df) = c("ParameterName","Type","Description", "Mandatory Parameters")    
+datatable(get_cfrequirement_df)%>%formatStyle(
+  'Mandatory Parameters', target = 'row',
+  backgroundColor = styleEqual(c("true", "Optional"), c('#5BE15B', 'yellow'))
+)
+```
+
+#### Get {.tabset .tabset-fade}
+Following is the method with Python to call the api. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+
+##### Python
+```{r,eval = FALSE}
+url = "http://111.93.164.108:5000/get_checkfile_required_packages?problemId=28972&language=Go"
+response = requests.get(url)
+response.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{'required_pckgs for Go': 'package main\nimport( \n"fmt"\n"bufio"\n"strconv"\n"strings"\n)\n\n\n\n'}
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+data = {"problemId": str(28971),
+        "language": "Python 3.x"}
+
+```
+
+#### Url
+```{r,eval = FALSE}
+https://<base_url>//get_checkfile_required_packages?problemId=28971&language=Go
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Update CheckFile Requirements</span> {.tabset .tabset-fade #Update-Checkfile-Requirements}
+* [Back To Top](#Go-Back)
+
+This api has the provision to update the checkfile for each language for specific problem along with the testcase details.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+update_checkfilerequirement_df = read.csv('update_checkfile_requirement.csv',stringsAsFactors = FALSE)
+colnames(update_checkfilerequirement_df) = c("ParameterName","Type","Description", "Mandatory Parameters")    
+datatable(update_checkfilerequirement_df)%>%formatStyle(
+  'Mandatory Parameters', target = 'row',
+  backgroundColor = styleEqual(c("true", "Optional"), c('#5BE15B', 'yellow'))
+)
+```
+
+#### PUT {.tabset .tabset-fade}
+Following is the method with Python to call the api. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+
+##### Python
+```{r,eval = FALSE}
+url = "http://111.93.164.108:5000/update_checkfile_recquired_packages"
+
+with open(r"testcases/rotatematrix/requirement.go","r") as outfile:
+    SourceFile = outfile.read()
+
+data = {"language": "Go",
+        "required_pckgs": SourceFile,
+        "problem_id": 28972
+        }
+
+response = requests.put(url,json = data)
+response.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+
+{'Updated': True}
+
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+**sourceFile** is the submission file from the user and it needs to be in string format.
+
+```{r,eval = FALSE}
+with open(r"testcases\rotatematrix\requirement.go","r") as outfile:
+    SourceFile = outfile.read()
+
+data = {"language": "Go",
+        "required_pckgs": SourceFile,
+        "problem_id": 28972
+        }
+
+```
+
+#### Url
+```{r,eval = FALSE}
+https://<base_url>/update_checkfile_required_packages
+
+```
+
+### <span style="color:#1B252E;font:Bembo">Delete CheckFile Requirements</span> {.tabset .tabset-fade #Delete-Checkfile-Requirements}
+* [Back To Top](#Go-Back)
+
+This api has the provision to get the checkfile for each language for specific problem along with the testcase details.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+delete_checkfilerequirement_df = read.csv('delete_checkfile_requirement.csv',stringsAsFactors = FALSE)
+colnames(delete_checkfilerequirement_df) = c("ParameterName","Type","Description", "Mandatory Parameters")    
+datatable(delete_checkfilerequirement_df)%>%formatStyle(
+  'Mandatory Parameters', target = 'row',
+  backgroundColor = styleEqual(c("true", "Optional"), c('#5BE15B', 'yellow'))
+)
+```
+
+#### DELETE {.tabset .tabset-fade}
+Following is the method with Python to call the api. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+
+##### Python
+```{r,eval = FALSE}
+data = {"language": "",
+        "problemId": 28841
+        }
+url = "http://<base-url>/delete_checkfile_required_packages"
+response = requests.delete(url,json = data)
+response.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{'Response': 'Deleted Successfully.'} or
+## if language does note exist
+
+{'Required_Packages for ': 'Language Does not exist'}
+```
+
+#### Data
+
+##### Example for the accepted data format 
+
+```{r,eval = FALSE}
+data = {"language": "",
+        "problemId": 28841
+        }
+
+```
+
+#### Url
+```{r,eval = FALSE}
+https://<base_url>/delete_checkfile_required_packages
+
+```
+
+
+### <span style="color:#1B252E;font:Bembo">Get Languages</span> {.tabset .tabset-fade #Get-Languages}
+* [Back To Top](#Go-Back)
+
+This api has the provision to get all the supported languages and its corresponding compilerId.
+
+
+#### Get {.tabset .tabset-fade}
+Following is the method with Python to call the api. Data is accepted in json format. please click on the data tab to get the details on the accepted data details.
+
+
+##### Python
+```{r,eval = FALSE}
+url = "http://<base-url>/get_languages"
+response = requests.get(url)
+response.json()
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+{
+  "C": 11, 
+  "C# [Mono]": 27, 
+  "C++ 4.3.2": 41, 
+  "Go": 114, 
+  "Java": 10, 
+  "JavaScript [SpiderMonkey]": 112, 
+  "Kotlin": 47, 
+  "Languages": "Compiler_Id", 
+  "Node.js": 56, 
+  "Objective-C": 43, 
+  "PHP": 29, 
+  "Perl": 3, 
+  "Python 3.x": 116, 
+  "Ruby": 17, 
+  "Swift": 85
+}
+```
+
+#### Url
+```{r,eval = FALSE}
+https://<base_url>/get_languages
+
+```

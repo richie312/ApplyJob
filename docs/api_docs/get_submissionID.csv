@@ -1,0 +1,8 @@
+Name,Type,Description,Mandatory
+problemID,integer,"problem id
+Note on the backward compatibility: it is also allowed to use ""the code of the problem"" as the value of the problemId parameter",TRUE
+source,string,source code,TRUE
+compilerID,integer,compiler id,TRUE
+tests,string,comma separated list of test case numbers to be executed against submission,Optional
+files,array,set of files that form a project to be executed (see also: multi-file mode),Optional
+candidate_name,String,Name of the Candidate; Unique User ID (uuid),TRUE

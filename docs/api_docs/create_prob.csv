@@ -1,0 +1,12 @@
+﻿Parameter Name,Type,Description,Mandatory Params
+code,string,"problem code; you can set it manually, however, you need to handle a case when the code is already taken",Sys generated
+name,string,problem name,TRUE
+body,string,problem statement,TRUE
+typeId,integer,"	problem type
+enum:
+0 - binary
+1 - minimize
+2 - maximize",FALSE
+masterjudgeId,integer,masterjudgeID,TRUE
+interactive,boolean,interactive problem flag,FALSE
+level,string,"Easy, Medium , Difficult",TRUE
