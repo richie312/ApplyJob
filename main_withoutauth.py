@@ -12,18 +12,10 @@ api = Api(app, version='1.0', title='Common Database API',
 
 # load the environment variables
 load_dotenv('.env')
-
 @app.route("/")
 def homepage():
     return render_template("user_form.html")
 
-@app.route('/addDetails', methods=['POST'])
-def addDetails(payload):
-    # Instantiate the Application object and execute required method.
-    obj = Application(payload["TableName"],payload)
-    # Insert data
-    obj.add_details()
-    return render_template('user_form_response.html')
 
 @api.route('/get_data/', methods=["GET"])
 @api.doc(params={'TableName': 'mission_half_marathon'})
@@ -32,6 +24,14 @@ class MyResource(Resource):
         t = request.args
         data = Application(t).get_data()
         return jsonify(str(data))
+
+@api.route('/add_details/', methods=["POST"])
+class MyResource(Resource):
+    def post(self):
+        t = request.get_json()
+        data = Application(t).add_details()
+        response = {"Response": "Successfully! added the details in the {table} table.".format(table=t["TableName"])}
+        return jsonify(response)
 
 
 @app.route('/delete', methods=['POST'])

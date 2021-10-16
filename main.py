@@ -158,5 +158,15 @@ class MyResource(Resource):
         data = Application(t).get_data()
         return jsonify(str(data))
 
+@api.route('/add_details', methods=["POST"])
+class MyResource(Resource):
+    @token_required
+    def post(self,current_user):
+        t = request.get_json()
+        data = Application(t).add_details()
+        response = {"Response": "Successfully! added the details in the {table} table.".format(table=t["TableName"])}
+        return jsonify(response)
+
+
 if __name__ == "__main__":
     app.run(host = '127.0.0.1',debug=True,port=5001)
