@@ -9,34 +9,36 @@ class Application(object):
         """
         It instantiate the class with payload.
         """
+        self.payload = payload
         self.table_name = payload["TableName"]
         self.application_date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.connection = db_connection()
         self.cursor = self.connection.cursor()
-        self.generator = Generator(payload)
+        self.generator = Generator(self.payload)
 
-    # def add_details(self):
-    #     self.function = "add details"
-    #     # todo dynamically create placeholder and prepare the query.
-    #     sql_query = "INSERT INTO {table} (Company_Name, Location, Email_Address, Application_Date)\
-    #     VALUES (%s, %s, %s,%s)".format(table=self.table_name)
-    #     val = (self.company, self.location, self.email, self.application_date)
-    #     self.cursor.execute(sql_query, val)
-    #     self.connection.commit()
-    #     self.cursor.close()
-    #     self.connection.close()
+    def add_details(self):
+        # todo dynamically create placeholder and prepare the query.
+        sql_query = self.generator.insert_query()
+        val = self.payload["Params"]["Data"]["RowValues"]
+        self.cursor.execute(sql_query, tuple(val))
+        self.connection.commit()
+        self.cursor.close()
+        self.connection.close()
 
     # def update(self):
     #     self.function = "update"
     #     # pass sql to update table
     #     pass
 
-    # def delete(self):
-    #     delete_query = self.generator.delete_query(self.initializer)
-    #     self.cursor(delete_query,(self.initializer["Value"],))
-    #     self.connection.commit()
-    #     self.cursor.close()
-    #     self.connection.close()
+    def delete(self):
+        delete_query = self.generator.delete_query()
+        self.cursor.execute("SET SQL_SAFE_UPDATES=0")
+        self.connection.commit()
+        self.cursor.execute(delete_query,(self.payload["Value"],))
+        self.connection.commit()
+        print(self.cursor.rowcount, "rows deleted.")
+        self.cursor.close()
+        self.connection.close()
 
 
     def get_data(self):
