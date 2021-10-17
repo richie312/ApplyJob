@@ -3,6 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from src.src_context import root_dir
+print(root_dir)
 load_dotenv(os.path.join(root_dir, '.env'))
 
 # creates Flask object
