@@ -12,11 +12,6 @@ api = Api(app, version='1.0', title='Common Database API',
 
 # load the environment variables
 load_dotenv('.env')
-@app.route("/")
-def homepage():
-    return render_template("user_form.html")
-
-
 @api.route('/get_data/', methods=["GET"])
 @api.doc(params={'TableName': 'mission_half_marathon'})
 class MyResource(Resource):
