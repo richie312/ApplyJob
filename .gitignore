@@ -4,4 +4,7 @@
 venv
 Jenkinsfile
 *.env
+*.sh
+token.txt
+
 
