@@ -76,7 +76,8 @@ class MyResource(Resource):
     @api.doc(responses={201: 'Authorization Successful'})
     def post(self):
         # creates dictionary of form data
-        auth = request.args
+        auth = request.form
+        print(auth)
         if not auth or not auth.get('email') or not auth.get('password'):
             # returns 401 if any email or / and password is missing
             return make_response(
@@ -123,7 +124,8 @@ class MyResource(Resource):
     @api.doc(responses={403: 'Not Authorized'})
     def post(self):
         # creates a dictionary of the form data
-        data = request.args
+        data = request.form
+        print(data)
         # gets name, email and password
         name, email = data.get('name'), data.get('email')
         password = data.get('password')
