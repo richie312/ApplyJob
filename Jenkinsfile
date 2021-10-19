@@ -22,9 +22,9 @@ pipeline {
 
         stage('Build preparations')
         {
-            when {
-                 // expression { return params.current_status == "closed" && params.merged == true }
-              }
+            // when {
+            //       expression { return params.current_status == "closed" && params.merged == true }
+            //   }
             steps
             {
                 script
