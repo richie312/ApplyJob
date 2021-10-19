@@ -1,0 +1,21 @@
+
+---
+  output: html_document
+---
+  
+## <span style="color:#6b5b95;font:Bembo"> Check File Status </span>
+
+
+#### The below table shows the checkfile status for each language w.r.t to Problem IDs created so far for Skillz online coding platform.
+
+
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+checkfile_df = read.csv('checkfile_status.csv',stringsAsFactors = FALSE)
+colnames(checkfile_df) = c("PID","Problem Name", "C",	"C# [Mono]",	"C++ 4.3.2",	"Go",	"Java",	"JavaScript [SpiderMonkey]",	"Kotlin",	"Node.js",	"Objective-C",	"Perl",	"PHP", "Python 3.x",	"Ruby",	"Swift")   
+datatable(checkfile_df,options = list(pageLength = 5))
+
+```

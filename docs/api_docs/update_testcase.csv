@@ -1,0 +1,9 @@
+﻿Name,Type,Description,Mandatory
+id,integer,"ProblemId,Note on the backward compatibility: it is also allowed to use ""the code of the problem"" as the value of the problemId parameter",TRUE
+number,integer,test case number,TRUE
+input,string,input data,Optional
+output,string,output data,Optional
+timeLimit,float,time limit [seconds],Optional
+judgeId,integer,judge id,TRUE
+active,boolean,whether test case should be active,TRUE
+check_file,String,the final which passes the test input to the source file and matches its out with testcase output,

@@ -1,0 +1,2 @@
+Parameter Name,Type,Description,Mandatory Params
+level,string,"Three types of problem categories; Easy, Medium and Difficult. Else parameter ""all"" will fetch all the problems regardless of level.",TRUE

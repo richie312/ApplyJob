@@ -1,0 +1,3 @@
+Name,Type,Description,Mandatory
+problemId,integer,ProblemID of a problem,TRUE
+language,string,language,TRUE

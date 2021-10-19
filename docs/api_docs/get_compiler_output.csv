@@ -1,0 +1,4 @@
+﻿Name,Type,Description,Mandatory
+Source,String,Source Code,TRUE
+Language,string,Language,TRUE
+input,string/integer,inputf for the function,TRUE

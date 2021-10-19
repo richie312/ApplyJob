@@ -1,0 +1,8 @@
+﻿Name,Type,Description,Mandatory Parameter
+id*,integer,problem id,TRUE
+code,,"Note on the backward compatibility: it is also allowed to use ""the code of the problem"" as the value of the problemId parameter",Optional
+name,string,problem name,TRUE
+body,string,problem description,Optional
+type,string,"problem type binary, minimise or maximise",Optional
+interactive,boolean,interactive problem flag,Optional
+masterjudgeId,integer,master judge id,Optional

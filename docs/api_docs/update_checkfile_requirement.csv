@@ -1,0 +1,4 @@
+Name,Type,Description,Mandatory
+language,string,name of the language,TRUE
+problemId,integer; but can be passed as string in query parameters,ID of the problem,TRUE
+required packages,string,source code to import packages and necessary files,TRUE

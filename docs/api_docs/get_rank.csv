@@ -1,0 +1,2 @@
+Parameter Name,Type,Default_Value,Description,Mandatory Params
+candidateName,string,NA,Individual ranks can be fetched by passing the name only,Optional
