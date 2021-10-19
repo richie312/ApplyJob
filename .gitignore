@@ -5,7 +5,7 @@ venv
 *.env
 *.sh
 token.txt
-Jenkinsfile_Template
+./Jenkinsfile_Template
 ./src/server/Database.db
 
 
