@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage("Checkout"){
 
-
+            
             steps{
             checkout([$class: 'GitSCM', branches: [[name: 'Develop']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
             sh "echo $params.current_status"
@@ -25,7 +25,7 @@ pipeline {
         stage('Build preparations')
         {
             when {
-                  expression { return params.current_status == "closed" && params.merged == true }
+                  expression { return params.current_status == "closed" && params.merged == "closed" }
               }
             steps
             {
@@ -46,7 +46,7 @@ pipeline {
 
         stage('build_stage'){
             when {
-                  expression { return params.current_status == "closed" && params.merged == true }
+                  expression { return params.current_status == "closed" && params.merged == "closed" }
               }
 
             steps {
@@ -64,7 +64,7 @@ pipeline {
         stage('post_build'){
 
             when {
-                  expression { return params.current_status == "closed" && params.merged == true }
+                  expression { return params.current_status == "closed" && params.merged == "closed" }
               }
 
             steps {
