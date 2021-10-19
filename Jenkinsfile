@@ -11,6 +11,9 @@ pipeline {
 
     stages {
         stage("Checkout"){
+            when {
+                  expression { return params.current_status == "closed" && params.merged == true }
+              }
             steps{
             checkout([$class: 'GitSCM', branches: [[name: 'Develop']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
              }
@@ -19,6 +22,9 @@ pipeline {
 
         stage('Build preparations')
         {
+            when {
+                  expression { return params.current_status == "closed" && params.merged == true }
+              }
             steps
             {
                 script
@@ -36,6 +42,10 @@ pipeline {
         }
 
         stage('build_stage'){
+            when {
+                  expression { return params.current_status == "closed" && params.merged == true }
+              }
+
             steps {
                     script {
                         sh  "docker login -u $env.docker_user -p Kevalasya@123"
@@ -49,6 +59,11 @@ pipeline {
             }
 
         stage('post_build'){
+
+            when {
+                  expression { return params.current_status == "closed" && params.merged == true }
+              }
+
             steps {
                     script {
                        sh " docker push $docker_user$slash$IMAGE"
