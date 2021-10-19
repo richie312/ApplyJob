@@ -15,9 +15,7 @@ pipeline {
             steps{
             checkout([$class: 'GitSCM', branches: [[name: 'Develop']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
 
-            expression{
-                return params.current_status
-            }
+
              }
         }
 
@@ -25,7 +23,7 @@ pipeline {
         stage('Build preparations')
         {
             when {
-                  expression { return params.current_status == "closed" && params.merged == true }
+                 // expression { return params.current_status == "closed" && params.merged == true }
               }
             steps
             {
@@ -39,6 +37,7 @@ pipeline {
                     // set the build display name
                     currentBuild.displayName = "#${BUILD_ID}-${VERSION}"
                     IMAGE = "$project_name:$ver"
+                    println "${params.current_status}"
                 }
             }
         }
