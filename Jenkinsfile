@@ -11,11 +11,14 @@ pipeline {
 
     stages {
         stage("Checkout"){
-            when {
-                  expression { return params.merged == false }
-              }
+
             steps{
             checkout([$class: 'GitSCM', branches: [[name: 'Develop']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
+
+            script{
+                sh  "$params.merged"
+                sh "$params.current_status"
+            }
              }
         }
 
