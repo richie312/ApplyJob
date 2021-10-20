@@ -77,7 +77,6 @@ class MyResource(Resource):
     def post(self):
         # creates dictionary of form data
         auth = request.form
-        print(auth)
         if not auth or not auth.get('email') or not auth.get('password'):
             # returns 401 if any email or / and password is missing
             return make_response(
@@ -85,11 +84,9 @@ class MyResource(Resource):
                 401,
                 {'WWW-Authenticate': 'Basic realm ="Login required !!"'}
             )
-
         user = User.query \
             .filter_by(email=auth.get('email')) \
             .first()
-
         if not user:
             # returns 401 if user does not exist
             return make_response(
@@ -97,7 +94,7 @@ class MyResource(Resource):
                 401,
                 {'WWW-Authenticate': 'Basic realm ="User does not exist !!"'}
             )
-
+        print(check_password_hash(user.password, auth.get('password')))
         if check_password_hash(user.password, auth.get('password')):
             # generates the JWT Token
             token = jwt.encode({
@@ -106,6 +103,7 @@ class MyResource(Resource):
             }, app.config['SECRET_KEY'])
 
             return make_response(jsonify({'token': token.decode('UTF-8')}), 201)
+
         # returns 403 if password is wrong
         return make_response(
             'Could not verify',
@@ -136,11 +134,14 @@ class MyResource(Resource):
             .first()
         if not user:
             # database ORM object
+            # generate the password and keep track of it.
+            password_user = generate_password_hash(password)
             user = User(
                 public_id=str(uuid.uuid4()),
                 name=name,
                 email=email,
-                password=generate_password_hash(password)
+                password= password_user,
+                created = datetime.now()
             )
             # insert user
             db.session.add(user)
