@@ -1,3 +1,0 @@
-Name,Type,Description,Mandatory
-userName,String,Name of the user; Unique User ID (uuid),TRUE
-problemName,String,Name of the problem,TRUE

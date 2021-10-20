@@ -1,3 +1,0 @@
-Name,Type,Description,Mandatory
-language,string,name of the language,TRUE
-problemId,integer,id of the problem,TRUE
