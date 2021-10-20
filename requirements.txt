@@ -7,3 +7,4 @@ mysql-connector==2.2.9
 pytest
 coverage
 flask-restx
+pymysql
