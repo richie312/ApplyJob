@@ -1,0 +1,3 @@
+﻿Parameter Name,Type,Description,Mandatory Params
+email,string,Email ID of the user,TRUE
+password,string,password for the user,TRUE

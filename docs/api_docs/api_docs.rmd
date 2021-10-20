@@ -1,0 +1,245 @@
+---
+output: html_document
+---
+
+
+# <span style="color:#586E82;font:Bembo"> API Documentation </span>
+
+### <span style="color:#1B252E;font:Bembo"> List of API</span> {.tabset.tabset-fade #Go-Back}
+
+Click on any of the below link to directly go to the documentation of the api.
+
+* [SignUp](#SignUp)
+* [Login](#Login)
+* [User](#User)
+* [GetData](#GetData)
+* [AddDetails](#AddDetails)
+* [Delete](#Delete)
+
+
+### <span style="color:#1B252E;font:Bembo">SignUp</span> {.tabset.tabset-fade #SignUp}
+* [Back To Top](#Go-Back)
+
+The first step is to sign up with the application and generate token which can be used
+as authentication of apis in order to get the data.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+SignUp_df = read.csv('./data/SignUp.csv',stringsAsFactors = FALSE)
+colnames(SignUp_df) = c("ParameterName","Type",    
+"Description", "Mandatory Parameter")   
+datatable(SignUp_df)%>%formatStyle(
+  'Mandatory Parameter', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+
+```
+
+#### POST {.tabset .tabset-fade}
+Following are the methods to call the api using curl in Postman. Data is accepted in form format. please click on the data tab to get the details on the accepted data details.
+
+##### cURL
+```{r,eval = FALSE}
+
+$ curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' -d "name=testuser&email=abc@example.com&password=yourpassword@123" '<<baseurl>>:5001/signup'
+```
+
+##### Postman Application
+```{r,eval = TRUE}
+
+knitr::include_graphics("./images/signup.png")
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+"Successfully registered."
+
+```
+
+
+##### Url
+```{r,eval = FALSE}
+<<base_url>>/signup
+
+```
+
+
+
+
+
+### <span style="color:#1B252E;font:Bembo">Login</span> {.tabset.tabset-fade #Login}
+* [Back To Top](#Go-Back)
+
+The second step is to login with the application and generate token which can be used
+as authentication of apis in order to get the data.
+
+```{r,echo=FALSE,eval=TRUE,warning=FALSE}
+library(DT)
+library(kableExtra)
+
+Login_df = read.csv('./data/login.csv',stringsAsFactors = FALSE)
+colnames(Login_df) = c("ParameterName","Type",    
+"Description", "Mandatory Parameter")   
+datatable(Login_df)%>%formatStyle(
+  'Mandatory Parameter', target = 'row',
+  backgroundColor = styleEqual(c(TRUE, "Optional"), c('#5BE15B', ''))
+)
+
+```
+
+
+#### POST {.tabset .tabset-fade}
+Following are the methods to call the api using curl and in Postman. Please click on the appropraite tab to see the details.
+
+##### cURL
+```{r,eval = FALSE}
+
+$ curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' -d "email=abc@example.com&password=yourpassword@123" '<<baseurl>>:5001/login'
+```
+
+##### Postman Application
+```{r,eval = TRUE}
+
+knitr::include_graphics("./images/login.png")
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+
+{
+  "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwdWJsaWNfaWQiOiI3ZmI4ZmI3MC00ZTczLTQ2MzItYjI1Yi1lODRhMTU4ZWQyOTciLCJleHAiOjE2MzQ3MTM3NDB9.MNXiEp5jPekgE9MH8fTXc46_9ydZveLr2YyR--Bo8Us"
+}
+
+```
+
+
+##### Url
+```{r,eval = FALSE}
+<<base_url>>/login
+
+```
+
+
+
+### <span style="color:#1B252E;font:Bembo">User</span> {.tabset.tabset-fade #User}
+* [Back To Top](#Go-Back)
+
+The third step is to use the token in header and to fetch the data from target api.
+For example, in the below example we have mentioned how to get the details.
+
+#### GET {.tabset .tabset-fade}
+Following are the methods to call the api using curl and in Postman. Please click on the appropriate tab to see the details.
+
+##### cURL
+```{r,eval = FALSE}
+
+curl -H "x-access-token:<<your recently generated token here; bydefault it is active only for 30 minutes>>" <base_url>:5001/user
+
+```
+
+##### Postman Application
+```{r,eval = TRUE}
+
+knitr::include_graphics("./images/user.png")
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+
+{
+    "users": [
+        {
+            "email": "richie.acb@gmail.com",
+            "name": "richie",
+            "public_id": "e7da1f26-4a33-460f-a371-5f600360e317"
+        },
+        {
+            "email": "richie.chatterjee31@gmail.com",
+            "name": "richie",
+            "public_id": "e009cb3f-928a-473c-b995-80ed250a2942"
+        },
+        {
+            "email": "richie.chatterjee32@gmail.com",
+            "name": "testuser",
+            "public_id": "9503c5ce-9c84-4fb7-acd0-856cd78344b6"
+        },
+        {
+            "email": "richie.chatterjee35@gmail.com",
+            "name": "testuser",
+            "public_id": "d5123a79-0185-4545-91d5-2d96d8c8d97b"
+        },
+        {
+            "email": "richie.chatterjee36@gmail.com",
+            "name": "testuser",
+            "public_id": "aa5d07a1-5ab1-47e9-a4b9-a4b0a876e68e"
+        },
+        {
+            "email": "abc@example.com",
+            "name": "testuser",
+            "public_id": "7fb8fb70-4e73-4632-b25b-e84a158ed297"
+        }
+    ]
+}
+
+```
+
+
+##### Url
+```{r,eval = FALSE}
+<<base_url>>/user
+
+```
+
+
+
+### <span style="color:#1B252E;font:Bembo">AddDetails</span> {.tabset.tabset-fade #GetData}
+* [Back To Top](#Go-Back)
+
+Similarly, with token in header and params in request, /get_data for any table residing in the provided 
+database can get fetched.
+
+#### GET {.tabset .tabset-fade}
+Following are the methods to call the api using curl and in Postman. Please click on the appropriate tab to see the details.
+
+##### cURL
+```{r,eval = FALSE}
+
+
+curl -H "x-access-token:<<your recently generated token here; bydefault it is active only for 30 minutes>>" http://127.0.0.1:5001/get_data?TableName=company_email1
+```
+
+##### Postman Application
+```{r,eval = TRUE}
+
+knitr::include_graphics("./images/get_data.png")
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+
+
+"{'col': [('Application_Date',), ('Company_Name',), ('Email_Address',), ('Location',)], 'data': [('Cognizant', 'Bangalore', 'karthick.chinnasamy@careernet.co.in', None), ('GradientM Consulting', 'Hyderabad', 'shilpa@gradientm.com', None), ('Aditech Concsulting', 'Hyderabad', 'priyanka@aditech.net', None), ('Gradient M', 'Hyderabad', 'kavya.reddy@gradientm.com', None), ('Orcapod Consulting', 'Hyderabad'.....}
+
+```
+
+
+##### Url
+```{r,eval = FALSE}
+<<base_url>>/get_data?TableName=company_email1
+
+```
+
