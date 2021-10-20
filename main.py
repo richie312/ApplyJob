@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, render_template
 import uuid  # for public id
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
@@ -22,7 +22,9 @@ api = Api(app,
           description='Common Database for all my application.')
 
 
-
+@app.route("/docs", methods = ['GET'])       
+def docs():
+    return render_template("api_docs.html")
 
 @api.route('/user', endpoint='user')
 @api.doc(params={})
