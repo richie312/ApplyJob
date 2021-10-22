@@ -15,7 +15,7 @@ class TestApplication(unittest.TestCase):
                         "Params":{
                                 "Data":{
                                 "Columns": "(Company_Name,Location,Email_Address, Application_Date)",
-                                "RowValues": ("Test","Test","richie.chatterjee31@gmail.com", "2021-10-16 13:07:25")
+                                "RowValues": ["Test","Test","richie.chatterjee31@gmail.com", "2021-10-16 13:07:25"]
                                   },
                                 "Placeholder": "(%s ,%s ,%s, %s)"
                                 }
@@ -51,7 +51,7 @@ class TestApplication(unittest.TestCase):
         ))
 
     def test_add_details_api(self):
-        get_data_url = self.url + r'/add_details/'
+        get_data_url = self.url + r'/add_details'
         web_data = requests.post(get_data_url, json=self.payload)
         self.assertEqual(200, web_data.status_code, "TestCase for web data api failed.")
         print("Test Case for Rest API functionality of {get_data_url} passed.".format(

@@ -20,10 +20,11 @@ class MyResource(Resource):
         data = Application(t).get_data()
         return jsonify(str(data))
 
-@api.route('/add_details/', methods=["POST"])
+@api.route('/add_details', methods=["POST"])
 class MyResource(Resource):
     def post(self):
         t = request.get_json()
+        print(t)
         data = Application(t).add_details()
         response = {"Response": "Successfully! added the details in the {table} table.".format(table=t["TableName"])}
         return jsonify(response)
