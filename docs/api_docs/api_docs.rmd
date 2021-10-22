@@ -12,9 +12,8 @@ Click on any of the below link to directly go to the documentation of the api.
 * [SignUp](#SignUp)
 * [Login](#Login)
 * [User](#User)
-* [GetData](#GetData)
+* [Get Data](#GetData)
 * [AddDetails](#AddDetails)
-* [Delete](#Delete)
 
 
 ### <span style="color:#1B252E;font:Bembo">SignUp</span> {.tabset.tabset-fade #SignUp}
@@ -202,8 +201,7 @@ knitr::include_graphics("./images/user.png")
 ```
 
 
-
-### <span style="color:#1B252E;font:Bembo">AddDetails</span> {.tabset.tabset-fade #GetData}
+### <span style="color:#1B252E;font:Bembo">Get Data</span> {.tabset.tabset-fade #GetData}
 * [Back To Top](#Go-Back)
 
 Similarly, with token in header and params in request, /get_data for any table residing in the provided 
@@ -240,6 +238,58 @@ knitr::include_graphics("./images/get_data.png")
 ##### Url
 ```{r,eval = FALSE}
 <<base_url>>/get_data?TableName=company_email1
+
+```
+
+
+### <span style="color:#1B252E;font:Bembo">AddDetails</span> {.tabset.tabset-fade #AddDetails}
+* [Back To Top](#Go-Back)
+
+With /add_details route, user can add details to any specific table in the provided database.
+Please click on the below tab to use the api.
+
+#### GET {.tabset .tabset-fade}
+Following are the methods to call the api using curl and in Postman. Please click on the appropriate tab to see the details.
+
+##### cURL
+```{r,eval = FALSE}
+
+
+curl -X POST -H "x-access-token:<<your recently generated token here>>" 'Content-Type: application/json' -d '{
+	"TableName": "company_email1",
+	"TargetColumn": "Company_Name",
+	"Params": {
+		"Data": {
+			"Columns": "(Company_Name,Location,Email_Address, Application_Date)",
+			"RowValues": ["Test", "Test", "richie.chatterjee31@gmail.com", "2021-10-16 13:07:25"]
+		},
+		"Placeholder": "(%s ,%s ,%s, %s)"
+	}
+}' http://127.0.0.1:5001/add_details
+```
+
+##### Postman Application
+```{r,eval = TRUE}
+
+knitr::include_graphics("./images/add_details.png")
+
+```
+
+
+##### Response
+
+```{r,echo = TRUE,eval=FALSE,warning=FALSE}
+
+{
+    "Response": "Successfully! added the details in the company_email1 table."
+}
+
+```
+
+
+##### Url
+```{r,eval = FALSE}
+<<base_url>>/add_details
 
 ```
 

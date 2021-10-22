@@ -1,3 +1,4 @@
 ﻿Parameter Name,Type,Description,Mandatory Params
 email,string,Email ID of the user,TRUE
 password,string,password for the user,TRUE
+session_time,integer,Accept in days; optional argument. By default the token is valid for 30 days.,FALSE
