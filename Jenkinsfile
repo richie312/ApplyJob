@@ -14,7 +14,7 @@ pipeline {
 
             
             steps{
-            checkout([$class: 'GitSCM', branches: [[name: 'Master']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
+            checkout([$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
             sh "echo $params.current_status"
             sh "echo $params.merged"
             sh "echo $params.branch"
