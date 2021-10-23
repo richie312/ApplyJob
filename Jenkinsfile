@@ -79,7 +79,6 @@ pipeline {
                 }
             }
         
-        }
     
         stage('Deployment'){
 
@@ -100,5 +99,6 @@ pipeline {
                     }
                 }
             }
+        }
 
     }
