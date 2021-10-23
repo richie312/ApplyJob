@@ -6,5 +6,6 @@ class User(db.Model):
     public_id = db.Column(db.String(50), unique=True)
     name = db.Column(db.String(100))
     email = db.Column(db.String(70), unique=True)
-    password = db.Column(db.String(80))
+    password = db.Column(db.String(1000))
+    created = db.Column(db.DATETIME)
 

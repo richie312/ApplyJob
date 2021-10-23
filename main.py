@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, make_response
+from flask import Flask, request, jsonify, make_response, render_template
 import uuid  # for public id
 from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
@@ -22,7 +22,9 @@ api = Api(app,
           description='Common Database for all my application.')
 
 
-
+@app.route("/docs", methods = ['GET'])       
+def docs():
+    return render_template("api_docs.html")
 
 @api.route('/user', endpoint='user')
 @api.doc(params={})
@@ -47,36 +49,17 @@ class MyResource(Resource):
 
         return jsonify({'users': output})
 
-## test route
-@app.route('/test_user', methods=['GET'])
-@token_required
-def get_all_users(current_user):
-    # querying the database
-    # for all the entries in it
-    users = User.query.all()
-    # converting the query objects
-    # to list of jsons
-    output = []
-    for user in users:
-        # appending the user data json
-        # to the response list
-        output.append({
-            'public_id': user.public_id,
-            'name': user.name,
-            'email': user.email
-        })
-
-    return jsonify({'users': output})
-
 # route for logging user in
 @api.route('/login', endpoint='login')
 @api.doc(params={'email': "youremailid@domain.com",
-                 "password": "yourpassword@123"})
+                 "password": "yourpassword@123",
+                 "session_time": "Accept in days; optional argument. By default the token is valid for 30 days."})
 class MyResource(Resource):
     @api.doc(responses={201: 'Authorization Successful'})
     def post(self):
         # creates dictionary of form data
-        auth = request.args
+        auth = request.args if request.args else request.form
+        session_time = auth.get("session_time") if auth.get("session_time") != None else 30
         if not auth or not auth.get('email') or not auth.get('password'):
             # returns 401 if any email or / and password is missing
             return make_response(
@@ -84,11 +67,9 @@ class MyResource(Resource):
                 401,
                 {'WWW-Authenticate': 'Basic realm ="Login required !!"'}
             )
-
         user = User.query \
             .filter_by(email=auth.get('email')) \
             .first()
-
         if not user:
             # returns 401 if user does not exist
             return make_response(
@@ -96,15 +77,15 @@ class MyResource(Resource):
                 401,
                 {'WWW-Authenticate': 'Basic realm ="User does not exist !!"'}
             )
-
         if check_password_hash(user.password, auth.get('password')):
             # generates the JWT Token
             token = jwt.encode({
                 'public_id': user.public_id,
-                'exp': datetime.utcnow() + timedelta(minutes=30)
+                'exp': datetime.utcnow() + timedelta(days=session_time)
             }, app.config['SECRET_KEY'])
 
             return make_response(jsonify({'token': token.decode('UTF-8')}), 201)
+
         # returns 403 if password is wrong
         return make_response(
             'Could not verify',
@@ -123,7 +104,8 @@ class MyResource(Resource):
     @api.doc(responses={403: 'Not Authorized'})
     def post(self):
         # creates a dictionary of the form data
-        data = request.args
+        data = request.args if request.args else request.form
+        print(data)
         # gets name, email and password
         name, email = data.get('name'), data.get('email')
         password = data.get('password')
@@ -134,11 +116,14 @@ class MyResource(Resource):
             .first()
         if not user:
             # database ORM object
+            # generate the password and keep track of it.
+            password_user = generate_password_hash(password)
             user = User(
                 public_id=str(uuid.uuid4()),
                 name=name,
                 email=email,
-                password=generate_password_hash(password)
+                password= password_user,
+                created = datetime.now()
             )
             # insert user
             db.session.add(user)
@@ -162,11 +147,12 @@ class MyResource(Resource):
 class MyResource(Resource):
     @token_required
     def post(self,current_user):
-        t = request.get_json()
-        data = Application(t).add_details()
-        response = {"Response": "Successfully! added the details in the {table} table.".format(table=t["TableName"])}
+        payload = request.get_json()
+        print(payload)
+        data = Application(payload).add_details()
+        response = {"Response": "Successfully! added the details in the {table} table.".format(table=payload["TableName"])}
         return jsonify(response)
 
 
 if __name__ == "__main__":
-    app.run(host = '127.0.0.1',debug=True,port=5001)
+    app.run(host = '0.0.0.0',debug=True,port=5001)

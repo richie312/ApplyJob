@@ -12,11 +12,6 @@ api = Api(app, version='1.0', title='Common Database API',
 
 # load the environment variables
 load_dotenv('.env')
-@app.route("/")
-def homepage():
-    return render_template("user_form.html")
-
-
 @api.route('/get_data/', methods=["GET"])
 @api.doc(params={'TableName': 'mission_half_marathon'})
 class MyResource(Resource):
@@ -25,10 +20,11 @@ class MyResource(Resource):
         data = Application(t).get_data()
         return jsonify(str(data))
 
-@api.route('/add_details/', methods=["POST"])
+@api.route('/add_details', methods=["POST"])
 class MyResource(Resource):
     def post(self):
         t = request.get_json()
+        print(t)
         data = Application(t).add_details()
         response = {"Response": "Successfully! added the details in the {table} table.".format(table=t["TableName"])}
         return jsonify(response)
