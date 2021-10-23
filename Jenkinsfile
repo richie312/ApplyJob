@@ -14,7 +14,7 @@ pipeline {
 
             
             steps{
-            checkout([$class: 'GitSCM', branches: [[name: 'Master']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
+            checkout([$class: 'GitSCM', branches: [[name: 'master']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
             sh "echo $params.current_status"
             sh "echo $params.merged"
             sh "echo $params.branch"
@@ -26,7 +26,7 @@ pipeline {
         stage('BuildPreparations')
         {
             when {
-                  expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
+                  expression { return params.branch == "master" && params.current_status == "closed" && params.merged == "closed" }
               }
             steps
             {
@@ -47,7 +47,7 @@ pipeline {
 
         stage('BuildStage'){
             when {
-                  expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
+                  expression { return params.branch == "master" && params.current_status == "closed" && params.merged == "closed" }
               }
 
             steps {
@@ -84,7 +84,7 @@ pipeline {
         stage('Deployment'){
 
             when {
-                  expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
+                  expression { return params.branch == "master" && params.current_status == "closed" && params.merged == "closed" }
               }
 
             steps {
