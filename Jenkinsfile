@@ -90,7 +90,7 @@ pipeline {
                     script {
                        sh " echo stopping and removing the previous build container..."
                        sh "docker rm --force api_container"
-                       sh "removing old image..."
+                       sh "echo removing old image..."
                        sh "docker rmi $docker_user$slash$IMAGE"
                        sh "echo pull updated image ..."
                        sh "docker pull $docker_user$slash$IMAGE"
