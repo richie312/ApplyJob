@@ -14,18 +14,19 @@ pipeline {
 
             
             steps{
-            checkout([$class: 'GitSCM', branches: [[name: 'Develop']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
+            checkout([$class: 'GitSCM', branches: [[name: 'Master']], extensions: [], userRemoteConfigs: [[credentialsId: '621b2d88-0c28-4ce2-93e3-997889f14448', url: 'https://github.com/richie312/CommonDatabaseAPI.git']]])
             sh "echo $params.current_status"
             sh "echo $params.merged"
+            sh "echo $params.branch"
 
              }
         }
 
 
-        stage('Build preparations')
+        stage('BuildPreparations')
         {
             when {
-                  expression { return params.current_status == "closed" && params.merged == "closed" }
+                  expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
               }
             steps
             {
@@ -44,9 +45,9 @@ pipeline {
             }
         }
 
-        stage('build_stage'){
+        stage('BuildStage'){
             when {
-                  expression { return params.current_status == "closed" && params.merged == "closed" }
+                  expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
               }
 
             steps {
@@ -61,10 +62,10 @@ pipeline {
                 }
             }
 
-        stage('post_build'){
+        stage('PostBuild'){
 
             when {
-                  expression { return params.current_status == "closed" && params.merged == "closed" }
+                  expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
               }
 
             steps {
@@ -80,5 +81,24 @@ pipeline {
         
         }
     
+        stage('Deployment'){
+
+            when {
+                  expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
+              }
+
+            steps {
+                    script {
+                       sh " echo stopping and removing the previous build container..."
+                       sh "docker rm --force api_container"
+                       sh "removing old image..."
+                       sh "docker rmi $docker_user$slash$IMAGE"
+                       sh "echo pull updated image ..."
+                       sh "docker pull $docker_user$slash$IMAGE"
+                       sh "echo running the image ..."
+                       sh "docker run --memory=512m --name api_container -p 5001:5001 $docker_user$slash$IMAGE:latest"
+                    }
+                }
+            }
 
     }

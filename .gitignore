@@ -3,8 +3,3 @@
 *.idea
 venv
 *.sh
-token.txt
-./Jenkinsfile_Template
-./src/server/Database.db
-
-
