@@ -95,7 +95,7 @@ pipeline {
                        sh "echo pull updated image ..."
                        sh "docker pull $docker_user$slash$IMAGE"
                        sh "echo running the image ..."
-                       sh "docker run --memory=512m --name api_container -p 5001:5001 $docker_user$slash$IMAGE"
+                       sh "docker run --detach --memory=512m --name api_container -p 5001:5001 $docker_user$slash$IMAGE"
                     }
                 }
             }
