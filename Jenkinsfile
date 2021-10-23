@@ -23,7 +23,7 @@ pipeline {
         }
 
 
-        stage('Build preparations')
+        stage('BuildPreparations')
         {
             when {
                   expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
@@ -45,7 +45,7 @@ pipeline {
             }
         }
 
-        stage('build_stage'){
+        stage('BuildStage'){
             when {
                   expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
               }
@@ -62,7 +62,7 @@ pipeline {
                 }
             }
 
-        stage('post_build'){
+        stage('PostBuild'){
 
             when {
                   expression { return params.branch == "Master" && params.current_status == "closed" && params.merged == "closed" }
