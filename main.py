@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 from datetime import datetime, timedelta
 from flask_restx import Api, Resource, fields
-from src.server.flask import app, db
+from src.server.flask_server import app, db
 from src.Auth.Authentication import token_required
 from src.sql.sqlite import User
 from src.objects.Application import Application
@@ -12,13 +12,14 @@ authorizations = {
     'apikey': {
         'type': 'apiKey',
         'in': 'header',
-        'name': 'authorization'
+        'name': 'x-access-token'
     }
 }
 api = Api(app,
           version='1.0',
           title='Common Database API',
           authorizations=authorizations,
+          security='apikey',
           description='Common Database for all my application.')
 
 
@@ -135,8 +136,8 @@ class MyResource(Resource):
 
 
 @api.route('/get_data/', methods=["GET"])
-@api.doc(params={'TableName': 'mission_half_marathon'})
 class MyResource(Resource):
+    @api.doc(params={'TableName': 'mission_half_marathon'}, security='apikey')
     @token_required
     def get(self,current_user):
         t = request.args
