@@ -1,4 +1,5 @@
 Flask-RESTful==0.3.8
+requests
 PyJWT==1.7.1
 Flask-SQLAlchemy
 python-dotenv
