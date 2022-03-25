@@ -1,4 +1,4 @@
-from src.server.flask import db
+from src.server.flask_server import db
 
 
 class User(db.Model):

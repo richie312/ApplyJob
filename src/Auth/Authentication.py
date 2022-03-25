@@ -8,7 +8,7 @@ import jwt
 from datetime import datetime, timedelta
 from functools import wraps
 from src.sql.sqlite import User
-from src.server.flask import app, db
+from src.server.flask_server import app, db
 
 
 # decorator for verifying the JWT
