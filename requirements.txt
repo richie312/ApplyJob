@@ -10,3 +10,5 @@ pytest
 coverage
 flask-restx
 pymysql
+werkzeug==2.1.2
+
